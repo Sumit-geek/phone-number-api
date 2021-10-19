@@ -20,14 +20,14 @@ import java.util.concurrent.Callable;
 public class CustomerController {
   private final CustomerService customerService;
 
-  @GetMapping("v1/customer/{customerId}/phones")
+  @GetMapping("v1/customers/{customerId}/phones")
   public Callable<ResponseEntity<CustomerDto>> getPhoneNumbers(
       @RequestHeader final HttpHeaders requestHeaders,
       @RequestParam(name = "customerId") @NotBlank String customerId) {
     return () -> new ResponseEntity<>(customerService.getPhoneNumberForCustomer(requestHeaders, customerId), HttpStatus.OK);
   }
 
-  @PutMapping("v1/customer/{customerId}/activate")
+  @PutMapping("v1/customers/{customerId}/activate")
   public Callable<ResponseEntity> activatePhoneNumber(
       @RequestHeader final HttpHeaders requestHeaders,
       @RequestParam(value = "customerId") @NotBlank String customerId,
