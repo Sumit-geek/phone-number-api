@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Entity(name = "customer")
+@Entity(name = "customers")
 @AllArgsConstructor
 @Builder
 @Getter

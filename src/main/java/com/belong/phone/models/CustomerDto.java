@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
@@ -17,12 +18,13 @@ import java.util.UUID;
 public class CustomerDto {
 
   private UUID id;
-  private List<Phone> phoneNos;
+  private List<PhoneDto> phoneNos;
 
   public static CustomerDto mapCustomer(Customer customer) {
     return CustomerDto.builder()
         .id(customer.getId())
-        .phoneNos(customer.getPhoneNos())
+        .phoneNos(customer.getPhoneNos()
+                .stream().map(PhoneDto::mapPhoneNumber).collect(Collectors.toList()))
         .build();
   }
 }

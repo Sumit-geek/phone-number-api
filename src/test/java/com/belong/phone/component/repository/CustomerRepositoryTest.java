@@ -23,11 +23,12 @@ class CustomerRepositoryTest {
   @Autowired
   private CustomerRepo customerRepo;
 
-  private final UUID uuid = UUID.fromString("71071914-b5ed-493f-bd40-fe720657b0a3");
+  private final UUID uuid = UUID.fromString("0522415f-0f7a-42b1-a072-3dd6f45beccb");
 
   @Test
   void findByCustomerId_givenCustomerId_ReturnPhoneNumberList() {
     Optional<Customer> customer = customerRepo.findById(uuid);
-    assertThat(customer.get().getId(), is(uuid.toString()));
+    assertThat(customer.get().getId(), is(uuid));
+    assertThat(customer.get().getPhoneNos().size(), is(2));
   }
 }

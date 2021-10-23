@@ -1,2 +1,2 @@
-delete from customer;
-delete from phone_number;
+delete from phone_numbers;
+delete from customers;

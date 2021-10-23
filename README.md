@@ -62,7 +62,7 @@ Swagger File having all the API Specification is defined in (/src/main/java/com/
 
 ### Application Base URL
 
-Base URL is exposed at 8090: **[Base URL](http://localhost:8090)**
+Base URL is exposed at 8090: **[Base URL](http://localhost:8090/phone-number)**
 
 ### Endpoints Exposed
 
@@ -70,15 +70,14 @@ Base URL is exposed at 8090: **[Base URL](http://localhost:8090)**
   | ------------ | -------- | ----------- |
 | GET | `/actuator/health` | Gets the status of the service |
 | GET | `/v1/phones/` | Returns all phone numbers in the DB |
-| GET | `v1/customer/{customerId}/phones` | Returns phone numbers associated with customerId |
-| PUT | `v1/customer/{customerId}/activate` | Updates the Active flag (need to pass Customer Object with Phone numbers as Body) It can be used for both activation and deactivation |
+| GET | `/v1/customers/{customerId}/phones` | Returns phone numbers associated with customerId |
+| PUT | `/v1/customers/{customerId}/activate` | Updates the Active flag (need to pass Customer Object with Phone numbers as Body) It can be used for both activation and deactivation |
 
 ### Assumptions
 
 * Only activation and deactivation is implemented through API. No new phone numbers were required to be inserted
 * This is an Internal facing API presumably implemented through an API or Kong Gateway
-* I assumed Customer table to present already and have only used CustomerId from the Customer table assuming customer
-  table is already present
+* I assumed Customers and Phone_Numbers table to present already and are populated with data.
 * Phone number is not deleted. It is only deactivated
 * As it mentioned activation, phone numbers cannot be inserted into the DB. Only, the active flag can be updated.
 * Assumed that other application-sit, prod files are not required to be updated

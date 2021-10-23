@@ -5,6 +5,7 @@ import com.belong.phone.exceptions.DataNotFoundException;
 import com.belong.phone.models.Customer;
 import com.belong.phone.models.CustomerDto;
 import com.belong.phone.models.Phone;
+import com.belong.phone.models.PhoneDto;
 import com.belong.phone.repository.CustomerRepo;
 import com.belong.phone.services.CustomerService;
 import org.apache.logging.log4j.util.Strings;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -45,8 +47,9 @@ class CustomerServiceTest {
   @Test
   void activatePhoneNumberForCustomerId_theReturnSuccessStatus() {
     HttpHeaders httpHeaders = getHttpHeaders();
+    CustomerDto customer = CustomerDto.builder().id(uuid).phoneNos(Arrays.asList(PhoneDto.builder().phoneNo("2222").status("Inactive").build())).build();
     when(customerRepo.findById(any())).thenReturn(createCustomer());
-    assertThat(customerService.activatePhoneNumber(httpHeaders, uuid.toString(), createCustomerDto("1111", "2222")), is(true));
+    assertThat(customerService.activatePhoneNumber(httpHeaders, uuid.toString(), customer).getPhoneNos().get(1).getStatus(), is("Inactive"));
   }
 
   @Test
@@ -80,10 +83,10 @@ class CustomerServiceTest {
   private Optional<Customer> createCustomer() {
     List<Phone> phones = Arrays.asList(Phone.builder()
                     .phoneNo("1111")
-                    .status("active").build(),
+                    .status("Active").build(),
             Phone.builder()
                     .phoneNo("2222")
-                    .status("inActive").build());
+                    .status("Inactive").build());
     return Optional.of(Customer.builder().id(uuid).phoneNos(phones).build());
   }
 
@@ -92,12 +95,14 @@ class CustomerServiceTest {
 
     phones.add(Phone.builder()
                     .phoneNo(phoneNumber1)
-                    .status("active").build());
+                    .status("Active").build());
     if (Strings.isNotBlank(phoneNumber2)) {
         phones.add(Phone.builder()
               .phoneNo(phoneNumber2)
-              .status("inActive").build());
+              .status("inactive").build());
     }
-    return CustomerDto.builder().id(uuid).phoneNos(phones).build();
+    return CustomerDto.builder().id(uuid).phoneNos(phones.stream()
+            .map(phone -> PhoneDto.mapPhoneNumber(phone))
+            .collect(Collectors.toList())).build();
   }
 }

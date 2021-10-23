@@ -5,6 +5,7 @@ import com.belong.phone.exceptions.DataNotFoundException;
 import com.belong.phone.models.Customer;
 import com.belong.phone.models.CustomerDto;
 import com.belong.phone.models.Phone;
+import com.belong.phone.models.PhoneDto;
 import com.belong.phone.repository.CustomerRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,20 +26,21 @@ public class CustomerService {
     public CustomerDto getPhoneNumberForCustomer(HttpHeaders httpHeaders, String customerId) {
         String correlationId = httpHeaders.getFirst(HttpHeader.X_CORRELATION_ID);
         log.debug("Request received for customerId: {} with correlationId: {}, ", customerId, correlationId);
-        return customerRepo.findById(UUID.fromString(customerId)).map(CustomerDto::mapCustomer).orElseGet(() -> {
+        Optional<Customer> customer = customerRepo.findById(UUID.fromString(customerId));
+        return customer.map(CustomerDto::mapCustomer).orElseGet(() -> {
             log.warn("No data found for customerId: {} with correlationId: {}", customerId, correlationId);
             return null;
         });
     }
 
     @Transactional
-    public boolean activatePhoneNumber(HttpHeaders httpHeaders, String customerId, CustomerDto customerIn) {
+    public CustomerDto activatePhoneNumber(HttpHeaders httpHeaders, String customerId, CustomerDto customerIn) {
         String correlationId = httpHeaders.getFirst(HttpHeader.X_CORRELATION_ID);
         Customer customer = customerRepo.findById(UUID.fromString(customerId)).orElseThrow(() ->
                 new DataNotFoundException("Matching customer not found for correlation Id: " + correlationId));
 
         boolean updated = false;
-        Phone requestedPhone = customerIn.getPhoneNos().get(0);
+        PhoneDto requestedPhone = customerIn.getPhoneNos().get(0);
         List<Phone> phones = customer.getPhoneNos();
         for (Phone phone : phones) {
             if (phone.getPhoneNo().equals(requestedPhone.getPhoneNo())) {
@@ -51,6 +54,6 @@ public class CustomerService {
             throw new DataNotFoundException("Matching phone number not found for given customer " + customerId);
         }
         customerRepo.save(customer);
-        return updated;
+        return CustomerDto.mapCustomer(customer);
     }
 }

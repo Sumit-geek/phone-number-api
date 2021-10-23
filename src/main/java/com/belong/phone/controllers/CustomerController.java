@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 @RestController
@@ -23,19 +24,18 @@ public class CustomerController {
   @GetMapping("v1/customers/{customerId}/phones")
   public Callable<ResponseEntity<CustomerDto>> getPhoneNumbers(
       @RequestHeader final HttpHeaders requestHeaders,
-      @RequestParam(name = "customerId") @NotBlank String customerId) {
+      @PathVariable(name = "customerId") @NotBlank String customerId) {
     return () -> new ResponseEntity<>(customerService.getPhoneNumberForCustomer(requestHeaders, customerId), HttpStatus.OK);
   }
 
   @PutMapping("v1/customers/{customerId}/activate")
-  public Callable<ResponseEntity> activatePhoneNumber(
+  public Callable<ResponseEntity<CustomerDto>> activatePhoneNumber(
       @RequestHeader final HttpHeaders requestHeaders,
-      @RequestParam(value = "customerId") @NotBlank String customerId,
+      @PathVariable(value = "customerId") @NotBlank String customerId,
       @RequestBody @Valid CustomerDto customer
   ) {
     String correlationId = requestHeaders.getFirst(HttpHeader.X_CORRELATION_ID);
-    customerService.activatePhoneNumber(requestHeaders, customerId, customer);
-    return () -> ResponseEntity.noContent().header(HttpHeader.X_CORRELATION_ID, correlationId).build();
+    return () ->new ResponseEntity(customerService.activatePhoneNumber(requestHeaders, customerId, customer), HttpStatus.ACCEPTED);
   }
 }
 
