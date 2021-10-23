@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -26,11 +25,9 @@ public class CustomerService {
     public CustomerDto getPhoneNumberForCustomer(HttpHeaders httpHeaders, String customerId) {
         String correlationId = httpHeaders.getFirst(HttpHeader.X_CORRELATION_ID);
         log.debug("Request received for customerId: {} with correlationId: {}, ", customerId, correlationId);
-        Optional<Customer> customer = customerRepo.findById(UUID.fromString(customerId));
-        return customer.map(CustomerDto::mapCustomer).orElseGet(() -> {
-            log.warn("No data found for customerId: {} with correlationId: {}", customerId, correlationId);
-            return null;
-        });
+        Customer customer = customerRepo.findById(UUID.fromString(customerId)).orElseThrow(() ->
+                new DataNotFoundException("No data found for customer_id: " + customerId));
+        return CustomerDto.mapCustomer(customer);
     }
 
     @Transactional

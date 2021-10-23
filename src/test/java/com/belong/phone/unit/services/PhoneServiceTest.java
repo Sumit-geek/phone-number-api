@@ -4,7 +4,6 @@ import com.belong.phone.models.Phone;
 import com.belong.phone.models.PhoneDto;
 import com.belong.phone.repository.PhoneRepo;
 import com.belong.phone.services.PhoneService;
-import org.apache.http.HttpRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
