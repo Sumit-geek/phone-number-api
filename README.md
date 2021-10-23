@@ -1,4 +1,4 @@
-# PHONE NUMBER API
+# PHONE NUMBER APIS
 
 ## Microservice to retrieve phone numbers and activate numbers for customer
 
