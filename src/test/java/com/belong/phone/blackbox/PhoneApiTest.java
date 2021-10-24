@@ -5,7 +5,6 @@ import com.belong.phone.models.CustomerDto;
 import com.belong.phone.models.PhoneDto;
 import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
