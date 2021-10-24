@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -30,8 +27,8 @@ public class Phone {
   private Customer customer;
   @Valid
   private String phoneNo;
-  @Valid
-  private String status;
+  @Enumerated(EnumType.STRING)
+  private Status status;
 
   @CreatedDate
   private LocalDateTime createdTime;

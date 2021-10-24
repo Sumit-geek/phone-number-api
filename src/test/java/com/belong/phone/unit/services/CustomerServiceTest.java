@@ -2,10 +2,7 @@ package com.belong.phone.unit.services;
 
 import com.belong.phone.common.HttpHeader;
 import com.belong.phone.exceptions.DataNotFoundException;
-import com.belong.phone.models.Customer;
-import com.belong.phone.models.CustomerDto;
-import com.belong.phone.models.Phone;
-import com.belong.phone.models.PhoneDto;
+import com.belong.phone.models.*;
 import com.belong.phone.repository.CustomerRepo;
 import com.belong.phone.services.CustomerService;
 import org.apache.logging.log4j.util.Strings;
@@ -47,9 +44,9 @@ class CustomerServiceTest {
   @Test
   void activatePhoneNumberForCustomerId_theReturnSuccessStatus() {
     HttpHeaders httpHeaders = getHttpHeaders();
-    CustomerDto customer = CustomerDto.builder().id(uuid).phoneNos(Arrays.asList(PhoneDto.builder().phoneNo("2222").status("Inactive").build())).build();
+    CustomerDto customer = CustomerDto.builder().id(uuid).phoneNos(Arrays.asList(PhoneDto.builder().phoneNo("2222").status(Status.InActive).build())).build();
     when(customerRepo.findById(any())).thenReturn(createCustomer());
-    assertThat(customerService.activatePhoneNumber(httpHeaders, uuid.toString(), customer).getPhoneNos().get(1).getStatus(), is("Inactive"));
+    assertThat(customerService.activatePhoneNumber(httpHeaders, uuid.toString(), customer).getPhoneNos().get(1).getStatus(), is(Status.InActive));
   }
 
   @Test
@@ -83,10 +80,10 @@ class CustomerServiceTest {
   private Optional<Customer> createCustomer() {
     List<Phone> phones = Arrays.asList(Phone.builder()
                     .phoneNo("1111")
-                    .status("Active").build(),
+                    .status(Status.Active).build(),
             Phone.builder()
                     .phoneNo("2222")
-                    .status("Inactive").build());
+                    .status(Status.InActive).build());
     return Optional.of(Customer.builder().id(uuid).phoneNos(phones).build());
   }
 
@@ -95,11 +92,11 @@ class CustomerServiceTest {
 
     phones.add(Phone.builder()
                     .phoneNo(phoneNumber1)
-                    .status("Active").build());
+                    .status(Status.Active).build());
     if (Strings.isNotBlank(phoneNumber2)) {
         phones.add(Phone.builder()
               .phoneNo(phoneNumber2)
-              .status("inactive").build());
+              .status(Status.InActive).build());
     }
     return CustomerDto.builder().id(uuid).phoneNos(phones.stream()
             .map(phone -> PhoneDto.mapPhoneNumber(phone))

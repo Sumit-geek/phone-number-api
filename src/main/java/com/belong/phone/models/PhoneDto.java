@@ -14,7 +14,7 @@ import lombok.ToString;
 public class PhoneDto {
 
   private String phoneNo;
-  private String status;
+  private Status status;
 
   public static PhoneDto mapPhoneNumber(Phone phoneNumber) {
     return PhoneDto.builder()

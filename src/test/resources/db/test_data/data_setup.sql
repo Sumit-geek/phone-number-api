@@ -16,7 +16,7 @@ values(uuid_generate_v4(), '0522415f-0f7a-42b1-a072-3dd6f45beccb', '222222', 'Ac
 
 insert into phone_numbers
 (id, customer_id, phone_no, status, created_time)
-values(uuid_generate_v4(), '54fd31fc-0753-4742-82b7-6369cc6a5662', '333333', 'Inactive', now());
+values(uuid_generate_v4(), '54fd31fc-0753-4742-82b7-6369cc6a5662', '333333', 'InActive', now());
 
 insert into phone_numbers
 (id, customer_id, phone_no, status, created_time)

@@ -2,6 +2,7 @@ package com.belong.phone.unit.services;
 
 import com.belong.phone.models.Phone;
 import com.belong.phone.models.PhoneDto;
+import com.belong.phone.models.Status;
 import com.belong.phone.repository.PhoneRepo;
 import com.belong.phone.services.PhoneService;
 import org.junit.jupiter.api.Test;
@@ -43,12 +44,12 @@ class PhoneServiceTest {
   private List<Phone> createPhoneNumbers() {
     return Arrays.asList(Phone.builder()
                     .phoneNo("1111")
-                    .status("active").build(),
+                    .status(Status.Active).build(),
             Phone.builder()
             .phoneNo("2222")
-            .status("inActive").build(),
+            .status(Status.InActive).build(),
             Phone.builder()
                     .phoneNo("3333")
-                    .status("active").build());
+                    .status(Status.Active).build());
   }
 }
